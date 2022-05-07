@@ -1,15 +1,14 @@
+import random
 import requests
 import numpy as np
 import requests
-# import networkx as nx
+import networkx as nx
 import matplotlib.pyplot as plt
 from bs4 import BeautifulSoup
-# from wordcloud import WordCloud
-import random
+from wordcloud import WordCloud
 
 limit = 1000
 start = 'https://habr.com/ru/all/'
-
 
 def get_data(start_link):
 	connects = []
@@ -21,11 +20,14 @@ def get_data(start_link):
 		soup = BeautifulSoup(data, 'lxml')
 		links_one_site = []
 		for link in soup.find_all('a'):
+			domains.append(start_link.split('/')[2])
 			links_one_site.append(link.get('href'))
-	links_10 = random.sample(links_one_site, 10)
-	print(links_10)
-	return 0
-
+		while len(links) != 10:
+			links.append(random.choice(links_one_site))
+			# links_10 = random.sample(links_one_site, 10)
+	print(domains)
+	print(links)
+	return connects, domains
 
 
 def domain_cloud(domains):
