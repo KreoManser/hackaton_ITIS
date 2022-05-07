@@ -7,27 +7,19 @@ from bs4 import BeautifulSoup
 from wordcloud import WordCloud
 
 limit = 1000
-start = '????'
+start = 'https://habr.com/ru/all/'
 
 def get_data(start_link):
 	connects = []
 	domains = []
-	link = "https://habr.com/ru/all/"
 	page = requests.get(link)
 	if page.status_code == 200:
-		print(page.text)
-	soup = BeautifulSoup(page, 'lxml')
-
-	for product in soup.findAll('a', attrs={'href': 'item'}):  # берем блок див по аттрибутам
-		title = product.findChildren('h3', attrs={'itemprop': 'name'})[0].text  # берем название товара
-		# (из списка первый элемент в текст)
-		link = product.findChildren('a', attrs={'data-marker': 'item-title'})[0]  # поиск ссылки по атрибуту
-		link = "https://www.avito.ru" + link.get('href', None)
-		# print(link)
-		''' Это класс! '''
-		price = product.findChildren('meta', attrs={'itemprop': 'price'})[0]
-		price = int(price.get('content', 0))
-		print(f"{title}, цена: {price}, ссылка: {link}")
+		page = requests.get(start_link)
+		data = page.text
+		soup = BeautifulSoup(data)
+		for link in soup.find_all('a'):
+			print(link.get('href'))
+		return connects, domains
 
 	return connects, domains
 
