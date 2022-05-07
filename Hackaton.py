@@ -34,25 +34,15 @@ def get_data(start_link):
         for link in soup.find_all('a'):
             href = link.attrs.get("href")
             domains.append(start_link.split('/')[2])
-            # links_one_site.append(link.get('href'))
             links_one_site.append(href)
             if any([href == "", href is None, not is_valid(href)]) and (href in links_one_site):
                 continue
-        #     if domain_name not in href:
-        #         # внешняя ссылка
-        #         if href not in external_urls:
-        #             print(f"{GRAY}[!] External link: {href}{RESET}")
-        #             external_urls.add(href)
-        #         continue
-        #     print(f"{GREEN}[*] Internal link: {href}{RESET}")
-        #     urls.add(href)
-        #     internal_urls.add(href)
         while len(links) != 10:
             links.add(*random.sample(links_one_site, 1))
             # links_10 = random.sample(links_one_site, 10)
     print(domains)
     print(links)
-    return connects, domains
+    return list(connects), domains
 
 
 def domain_cloud(domains):
@@ -82,5 +72,6 @@ def graph(connections, with_labels=True):
 
 
 conn, dom = get_data(start)
+print(conn)
 graph(conn)
 domain_cloud(dom)
