@@ -1,5 +1,7 @@
 import random
 from urllib.parse import urljoin, urlparse
+# from urllib2 import urlopen
+# from urlparse import urljoin
 
 import requests
 import numpy as np
@@ -28,20 +30,18 @@ def get_data(start_link):
     if page.status_code == 200:
         data = page.text
         soup = BeautifulSoup(data, 'lxml')
-        links_one_site = []
+        links_one_site = set()
         for link in soup.find_all('a'):
             href = link.attrs.get("href")
             domains.append(start_link.split('/')[2])
             # links_one_site.append(link.get('href'))
-            links_one_site.append(href)
-            if href == "" or href is None:
+            links_one_site.add(href)
+            if (href == "") or (href is None) or (not is_valid(href)):
                 continue
-            # href = urljoin(start_link, href)
-            # parsed_href = urlparse(href)
-            # href = parsed_href.scheme + "://" + parsed_href.netloc + parsed_href.path
-            # if not is_valid(href):
-            #     continue
-            # if href in internal_urls:
+            href = urljoin(start_link, href)
+            parsed_href = urlparse(href)
+            href = parsed_href.scheme + "://" + parsed_href.netloc + parsed_href.path
+            # if href in l:
             #     # уже в наборе
             #     continue
         #     if domain_name not in href:
