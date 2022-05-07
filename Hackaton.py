@@ -20,10 +20,15 @@ def get_data(start_link):
 		soup = BeautifulSoup(data, 'lxml')
 		links_one_site = []
 		for link in soup.find_all('a'):
+			href = link.attrs.get("href")
 			domains.append(start_link.split('/')[2])
-			links_one_site.append(link.get('href'))
+			# links_one_site.append(link.get('href'))
+			links_one_site.append(href)
+			if href == "" or href is None:
+				# пустой тег href
+				continue
 		while len(links) != 10:
-			links.append(random.choice(links_one_site))
+			links.append(*random.sample(links_one_site, 1))
 			# links_10 = random.sample(links_one_site, 10)
 	print(domains)
 	print(links)
