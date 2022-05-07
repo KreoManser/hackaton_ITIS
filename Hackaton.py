@@ -30,20 +30,17 @@ def get_data(start_link):
     if page.status_code == 200:
         data = page.text
         soup = BeautifulSoup(data, 'lxml')
-        links_one_site = set()
+        links_one_site = []
         for link in soup.find_all('a'):
             href = link.attrs.get("href")
             domains.append(start_link.split('/')[2])
             # links_one_site.append(link.get('href'))
-            links_one_site.add(href)
-            if (href == "") or (href is None) or (not is_valid(href)):
+            links_one_site.append(href)
+            if ((href == "") or (href is None) or (not is_valid(href))) and (href in links_one_site):
                 continue
-            href = urljoin(start_link, href)
-            parsed_href = urlparse(href)
-            href = parsed_href.scheme + "://" + parsed_href.netloc + parsed_href.path
-            # if href in l:
-            #     # уже в наборе
-            #     continue
+            # href = urljoin(start_link, href)
+            # parsed_href = urlparse(href)
+            # href = parsed_href.scheme + "://" + parsed_href.netloc + parsed_href.path
         #     if domain_name not in href:
         #         # внешняя ссылка
         #         if href not in external_urls:
